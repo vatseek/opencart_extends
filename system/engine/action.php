@@ -20,7 +20,15 @@ final class Action {
 				
 				continue;
 			}
-			
+
+            if (is_file(DIR_APPLICATION . 'extends/controller/' . str_replace(array('../', '..\\', '..'), '', $path) . '.php')) {
+                $this->file = DIR_APPLICATION . 'extends/controller/' . str_replace(array('../', '..\\', '..'), '', $path) . '.php';
+                $this->class = 'Controller' . preg_replace('/[^a-zA-Z0-9]/', '', $path) . 'Extends';
+                array_shift($parts);
+
+                break;
+            }
+
 			if (is_file(DIR_APPLICATION . 'controller/' . str_replace(array('../', '..\\', '..'), '', $path) . '.php')) {
 				$this->file = DIR_APPLICATION . 'controller/' . str_replace(array('../', '..\\', '..'), '', $path) . '.php';
 				

@@ -10,6 +10,15 @@ final class Loader {
 		return $this->registry->get($key);
 	}
 
+    protected function getFileToLoad($file)
+    {
+        if (file_exists($file)) {
+            return $file;
+        }
+
+        return false;
+    }
+
 	public function __set($key, $value) {
 		$this->registry->set($key, $value);
 	}
@@ -37,8 +46,12 @@ final class Loader {
 	}
 
 	public function model($model) {
-		$file  = DIR_APPLICATION . 'model/' . $model . '.php';
-		$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $model);
+        if (($file = $this->getFileToLoad(DIR_APPLICATION . 'extends/model/' . $model . '.php')) !== false) {
+            $class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $model . 'Extends');
+        } else {
+            $file  = DIR_APPLICATION . 'model/' . $model . '.php';
+            $class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $model);
+        }
 
 		if (file_exists($file)) { 
 			include_once($file);
